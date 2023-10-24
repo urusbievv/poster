@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Poster</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sign_in_header">Авторизация</string>
+    <string name="email_hint">Введите логин</string>
+    <string name="password_hint">Пароль</string>
+    <string name="btn_entrance">Войти</string>
+    <string name="please_sign_in_div">Войдите в свою учетную запись</string>
+    <string name="register_div">Зарегистрироваться</string>
+    <string name="do_not_account_text">У вас нет аккаунта:</string>
+    <string name="register_header">Регистрация</string>
+    <string name="name_reg_hint">Имя и фамилия</string>
+    <string name="email_reg_hint">Почта</string>
+    <string name="number_reg_hint">Телефон</string>
+    <string name="reg_button">Зарегистрироваться</string>
+    <string name="have_account_div">У вас уже есть аккаунт:</string>
+    <string name="sing_in_fragment_div">Вход</string>
+    <string name="search_menu">Поиск</string>
+</resources>
