@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import com.example.poster.R
 import com.example.poster.databinding.FragmentRegisterBinding
 import com.example.poster.presentation.viewModel.RegisterViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -40,7 +41,6 @@ class RegisterFragment : Fragment() {
         phoneEditTextReg = binding.phoneEditTextReg
         btnRegister = binding.btnRegister
         singInText = binding.signInText
-
         return root
     }
 
@@ -58,6 +58,9 @@ class RegisterFragment : Fragment() {
         })
         btnRegister.setOnClickListener {
             saveUserRegistration()
+        }
+        singInText.setOnClickListener{
+            navigateToEntranceFragment()
         }
         setButtonClickListeners()
     }
@@ -81,5 +84,13 @@ class RegisterFragment : Fragment() {
 
     private fun setButtonClickListeners() {
 
+    }
+
+    private fun navigateToEntranceFragment() {
+        parentFragmentManager
+            .beginTransaction()
+            .replace(R.id.entrance_place_holder, EntranceFragment.newInstance())
+            .addToBackStack(null)
+            .commit()
     }
 }

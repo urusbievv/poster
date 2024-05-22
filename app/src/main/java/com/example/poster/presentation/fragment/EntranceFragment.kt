@@ -1,7 +1,7 @@
 package com.example.poster.presentation.fragment
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.example.poster.R
 import com.example.poster.databinding.FragmentEntraceBinding
+import com.example.poster.presentation.activity.DetectActivity
 import com.example.poster.presentation.viewModel.EntranceViewModel
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -53,7 +54,7 @@ class EntranceFragment : Fragment() {
 
         btnEntrance.setOnClickListener { onEntranceButtonClicked() }
         registerText.setOnClickListener {
-
+            navigateToRegisterFragment()
         }
     }
 
@@ -70,7 +71,20 @@ class EntranceFragment : Fragment() {
         val email: String = emailEditText.text.toString()
         val password: String = passwordEditText.text.toString()
         vm.onEntranceClicked(email, password)
+        navigateToDetectActivity()
     }
 
+    private fun navigateToRegisterFragment() {
+        parentFragmentManager
+            .beginTransaction()
+            .replace(R.id.entrance_place_holder, RegisterFragment.newInstance())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun navigateToDetectActivity() {
+        val intent = Intent(activity, DetectActivity::class.java)
+        startActivity(intent)
+    }
 
 }
