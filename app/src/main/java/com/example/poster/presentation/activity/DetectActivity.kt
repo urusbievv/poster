@@ -56,7 +56,7 @@ class DetectActivity : AppCompatActivity() {
         val byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3)
         byteBuffer.order(ByteOrder.nativeOrder())
 
-        // ? проверить
+
         val intValues = IntArray(imageSize * imageSize)
         image.getPixels(intValues, 0, image.width, 0, 0, image.width, image.height)
         var pixel = 0

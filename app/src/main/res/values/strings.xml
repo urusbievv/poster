@@ -17,4 +17,6 @@
     <string name="have_account_div">У вас уже есть аккаунт:</string>
     <string name="sing_in_fragment_div">Вход</string>
     <string name="search_menu">Поиск</string>
+    <string name="сlassified">Распознан как:</string>
+    <string name="detectBtn">Распознать</string>
 </resources>
