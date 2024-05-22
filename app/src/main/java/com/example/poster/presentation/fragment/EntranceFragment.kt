@@ -11,9 +11,9 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import app.ij.mlwithtensorflowlite.DetectActivity
 import com.example.poster.R
 import com.example.poster.databinding.FragmentEntraceBinding
+import com.example.poster.presentation.activity.DetectActivity
 import com.example.poster.presentation.viewModel.EntranceViewModel
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel

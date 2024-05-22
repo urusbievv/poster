@@ -1,19 +1,23 @@
-package app.ij.mlwithtensorflowlite
+package com.example.poster.presentation.activity
 
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.example.poster.R
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.media.ThumbnailUtils
-import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.Nullable
-import androidx.appcompat.app.AppCompatActivity
-import com.example.poster.R
+import com.example.poster.ml.Model
+import org.tensorflow.lite.DataType
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+
 
 class DetectActivity : AppCompatActivity() {
 
@@ -44,10 +48,65 @@ class DetectActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, @Nullable data: Intent?) {
+    private fun classifyImage(image: Bitmap) {
+        val model = Model.newInstance(applicationContext)
+
+        val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
+
+        val byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3)
+        byteBuffer.order(ByteOrder.nativeOrder())
+
+        // ? проверить
+        val intValues = IntArray(imageSize * imageSize)
+        image.getPixels(intValues, 0, image.width, 0, 0, image.width, image.height)
+        var pixel = 0
+        for (i in 0 until  imageSize){
+            for (j in 0 until  imageSize){
+                val value = intValues[pixel++] //RGB
+                byteBuffer.putFloat(((value shr 16) and 0xFF) * (1f / 255f))
+                byteBuffer.putFloat(((value shr 8) and 0xFF) * (1f / 255f))
+                byteBuffer.putFloat((value and 0xFF) * (1f / 255f))
+            }
+        }
+
+        inputFeature0.loadBuffer(byteBuffer)
+
+        val outputs = model.process(inputFeature0)
+        val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+
+        val confidences = outputFeature0.floatArray
+        var maxPos = 0
+        var maxConfidence = 0f
+        for (i in confidences.indices){
+            if(confidences[i] > maxConfidence){
+                maxConfidence = confidences[i]
+                maxPos = i
+            }
+        }
+        val classes = arrayOf("Albert", "Phone")
+        result.text = classes[maxPos]
+
+        var s = ""
+        for (i in classes.indices){
+            s += String.format("%s: %1f%%\n", classes[i],confidences[i] * 100)
+        }
+        confidence.text = s
+        model.close()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             // Handle camera image result here
+            var image: Bitmap = data?.extras?.get("data") as Bitmap
+            val dimension = Math.min(image.width,image.height)
+            image = ThumbnailUtils.extractThumbnail(image,dimension,dimension)
+            imageView.setImageBitmap(image)
+
+            image = Bitmap.createScaledBitmap(image,imageSize,imageSize,false)
+            classifyImage(image)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
+
+
 }
