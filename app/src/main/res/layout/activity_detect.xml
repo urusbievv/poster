@@ -13,11 +13,11 @@
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginHorizontal="50dp"
+        android:layout_marginBottom="5dp"
         android:backgroundTint="@color/blue"
         android:padding="20dp"
         android:text="@string/detectBtn"
         android:textAllCaps="false"
-        android:layout_marginBottom="5dp"
         android:textColor="@color/white"
         android:textSize="18sp" />
     <ImageView
