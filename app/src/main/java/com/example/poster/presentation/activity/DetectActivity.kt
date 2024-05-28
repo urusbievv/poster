@@ -89,7 +89,8 @@ class DetectActivity : AppCompatActivity() {
             }
         }
         // Задание результата
-        val classes = arrayOf("Albert", "Phone")
+        val classes = arrayOf("Поворот направо запрещен", "Уступите дорогу",
+            "Главная дорога","Неровная дорога","Опасный поворот")
         result.text = classes[maxPos]
 
         // Формирование строки с оценкой для каждого класса
@@ -120,6 +121,5 @@ class DetectActivity : AppCompatActivity() {
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
-
-
 }
+        
