@@ -18,6 +18,7 @@ import com.example.poster.data.detect.dataSource.DetectedObjectDataSource
 import com.example.poster.domain.detect.usecaseImpl.SaveDetectedObjectUseCaseImpl
 import com.example.poster.manager.DetectedObjectManager
 import com.example.poster.ml.Model
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -131,10 +132,12 @@ class DetectActivity : AppCompatActivity() {
 
             // Классификация изображения
             classifyImage(image)
-            val userId = "some_user_id" // Здесь вы должны получить userId для текущего пользователя
+            val userId = FirebaseAuth.getInstance().currentUser?.uid // Здесь вы должны получить userId для текущего пользователя
             val objectName = result.text.toString() // Получаем имя класса, определенного моделью
             GlobalScope.launch {
-                onObjectDetected(userId, objectName)
+                if (userId != null) {
+                    onObjectDetected(userId, objectName)
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
