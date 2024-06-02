@@ -12,7 +12,15 @@ import android.provider.MediaStore
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.poster.data.detect.repositoryImpl.FirebaseDetectedObjectRepository
+import com.example.poster.data.detect.dataSource.DetectedObjectDataSource
+
+import com.example.poster.domain.detect.usecaseImpl.SaveDetectedObjectUseCaseImpl
+import com.example.poster.manager.DetectedObjectManager
 import com.example.poster.ml.Model
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.nio.ByteBuffer
@@ -26,6 +34,7 @@ class DetectActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var picture: Button
     private val imageSize = 224
+    private lateinit var detectedObjectManager: DetectedObjectManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +44,11 @@ class DetectActivity : AppCompatActivity() {
         confidence = findViewById(R.id.confidence)
         imageView = findViewById(R.id.imageView)
         picture = findViewById(R.id.button)
-
+        val firebaseFirestore = FirebaseFirestore.getInstance()
+        val firebaseDetectedObjectRepository = FirebaseDetectedObjectRepository(firebaseFirestore)
+        val detectedObjectDataSource = DetectedObjectDataSource(firebaseDetectedObjectRepository)
+        val saveDetectedObjectUseCase = SaveDetectedObjectUseCaseImpl(detectedObjectDataSource)
+        detectedObjectManager = DetectedObjectManager(saveDetectedObjectUseCase)
 
         // проверка разрешение камеры
         picture.setOnClickListener {
@@ -100,7 +113,7 @@ class DetectActivity : AppCompatActivity() {
         }
         // отображение оценки
         confidence.text = s
-
+        // После классификации вызываем метод onObjectDetected, передавая необходимые параметры
         // Закрытие модели для освобождения ресурсов
         model.close()
     }
@@ -118,8 +131,17 @@ class DetectActivity : AppCompatActivity() {
 
             // Классификация изображения
             classifyImage(image)
+            val userId = "some_user_id" // Здесь вы должны получить userId для текущего пользователя
+            val objectName = result.text.toString() // Получаем имя класса, определенного моделью
+            GlobalScope.launch {
+                onObjectDetected(userId, objectName)
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private suspend fun onObjectDetected(userId: String, objectName: String) {
+        detectedObjectManager.saveDetectedObject(userId, objectName)
     }
 }
         
