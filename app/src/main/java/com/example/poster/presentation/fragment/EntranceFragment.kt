@@ -49,7 +49,9 @@ class EntranceFragment : Fragment() {
             showSnackBar(errorMessage)
         })
         vm.successLiveData.observe(this, Observer { success ->
-            showSnackBar("Привет")
+            if (success) {
+                navigateToDetectActivity()
+            }
         })
 
         btnEntrance.setOnClickListener { onEntranceButtonClicked() }
@@ -71,7 +73,6 @@ class EntranceFragment : Fragment() {
         val email: String = emailEditText.text.toString()
         val password: String = passwordEditText.text.toString()
         vm.onEntranceClicked(email, password)
-        navigateToDetectActivity()
     }
 
     private fun navigateToRegisterFragment() {
@@ -86,5 +87,4 @@ class EntranceFragment : Fragment() {
         val intent = Intent(activity, DetectActivity::class.java)
         startActivity(intent)
     }
-
 }

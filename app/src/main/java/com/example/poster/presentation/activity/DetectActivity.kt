@@ -31,7 +31,6 @@ import java.nio.ByteOrder
 class DetectActivity : AppCompatActivity() {
 
     private lateinit var result: TextView
-    private lateinit var confidence: TextView
     private lateinit var imageView: ImageView
     private lateinit var picture: Button
     private val imageSize = 224
