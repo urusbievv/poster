@@ -14,10 +14,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.poster.data.detect.repositoryImpl.FirebaseDetectedObjectRepository
 import com.example.poster.data.detect.dataSource.DetectedObjectDataSource
-
 import com.example.poster.domain.detect.usecaseImpl.SaveDetectedObjectUseCaseImpl
 import com.example.poster.manager.DetectedObjectManager
 import com.example.poster.ml.Model
+import com.example.poster.utils.DetectedClasses
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.GlobalScope
@@ -42,7 +42,6 @@ class DetectActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detect)
 
         result = findViewById(R.id.result)
-        confidence = findViewById(R.id.confidence)
         imageView = findViewById(R.id.imageView)
         picture = findViewById(R.id.button)
         val firebaseFirestore = FirebaseFirestore.getInstance()
@@ -103,18 +102,13 @@ class DetectActivity : AppCompatActivity() {
             }
         }
         // Задание результата
-        val classes = arrayOf("Поворот направо запрещен", "Уступите дорогу",
-            "Главная дорога","Неровная дорога","Опасный поворот")
+        val classes = DetectedClasses.classes
         result.text = classes[maxPos]
+        // Получение описания для распознанного знака
+        val description = DetectedClasses.getDescriptionForResult(classes[maxPos])
+        // Установка описания в TextView
+        findViewById<TextView>(R.id.description).text = description
 
-        // Формирование строки с оценкой для каждого класса
-        var s = ""
-        for (i in classes.indices){
-            s += String.format("%s: %1f%%\n", classes[i],confidences[i] * 100)
-        }
-        // отображение оценки
-        confidence.text = s
-        // После классификации вызываем метод onObjectDetected, передавая необходимые параметры
         // Закрытие модели для освобождения ресурсов
         model.close()
     }
@@ -132,8 +126,8 @@ class DetectActivity : AppCompatActivity() {
 
             // Классификация изображения
             classifyImage(image)
-            val userId = FirebaseAuth.getInstance().currentUser?.uid // Здесь вы должны получить userId для текущего пользователя
-            val objectName = result.text.toString() // Получаем имя класса, определенного моделью
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
+            val objectName = result.text.toString()
             GlobalScope.launch {
                 if (userId != null) {
                     onObjectDetected(userId, objectName)
@@ -147,4 +141,3 @@ class DetectActivity : AppCompatActivity() {
         detectedObjectManager.saveDetectedObject(userId, objectName)
     }
 }
-        
