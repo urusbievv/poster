@@ -107,8 +107,8 @@ class DetectActivity : AppCompatActivity() {
             val description = DetectedClasses.getDescriptionForResult(classes[maxPos])
             findViewById<TextView>(R.id.description).text = description
         } else {
-            result.text = "Не распознано"
-            findViewById<TextView>(R.id.description).text = ""
+            result.text = DetectedClasses.NOT_RECOGNIZED
+            findViewById<TextView>(R.id.description).text = DetectedClasses.MESSAGE_RECOGNIZED
         }
         // Закрытие модели для освобождения ресурсов
         model.close()
