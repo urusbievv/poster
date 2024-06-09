@@ -40,7 +40,6 @@ class DetectActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detect)
-
         result = findViewById(R.id.result)
         imageView = findViewById(R.id.imageView)
         picture = findViewById(R.id.button)
@@ -102,13 +101,15 @@ class DetectActivity : AppCompatActivity() {
             }
         }
         // Задание результата
-        val classes = DetectedClasses.classes
-        result.text = classes[maxPos]
-        // Получение описания для распознанного знака
-        val description = DetectedClasses.getDescriptionForResult(classes[maxPos])
-        // Установка описания в TextView
-        findViewById<TextView>(R.id.description).text = description
-
+        if (maxConfidence >= 0.9) {
+            val classes = DetectedClasses.classes
+            result.text = classes[maxPos]
+            val description = DetectedClasses.getDescriptionForResult(classes[maxPos])
+            findViewById<TextView>(R.id.description).text = description
+        } else {
+            result.text = "Не распознано"
+            findViewById<TextView>(R.id.description).text = ""
+        }
         // Закрытие модели для освобождения ресурсов
         model.close()
     }
