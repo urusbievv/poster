@@ -43,12 +43,26 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text=""
+        android:layout_marginTop="30dp"
+        android:paddingHorizontal="30dp"
         android:textColor="#C30000"
         android:textStyle="bold"
+        android:gravity="center"
         android:textSize="27sp"
         android:id="@+id/result"
         android:layout_below="@+id/classified"
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Описание:"
+        android:id="@+id/descriptionLabel"
+        android:fontFamily="@font/intelone"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/result" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -60,7 +74,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginHorizontal="50dp"
         android:layout_marginBottom="20dp"
-        android:layout_below="@+id/result"
+        android:layout_below="@+id/descriptionLabel"
         android:layout_marginTop="20dp"
         android:maxLines="5"
         android:ellipsize="end"
