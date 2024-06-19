@@ -19,4 +19,5 @@
     <string name="search_menu">Поиск</string>
     <string name="сlassified">Распознан как:</string>
     <string name="detectBtn">Распознать</string>
+    <string name="desc">Описание:</string>
 </resources>

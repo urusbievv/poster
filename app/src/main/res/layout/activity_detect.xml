@@ -56,7 +56,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Описание:"
+        android:text="@string/desc"
         android:id="@+id/descriptionLabel"
         android:fontFamily="@font/intelone"
         android:textSize="20sp"
